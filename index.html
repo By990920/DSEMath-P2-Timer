@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>P2-Time-Record</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 10px;
+            line-height: 1.6;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 8px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        .status-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 5px;
+            margin-bottom: 10px;
+            flex-shrink: 0;
+        }
+        
+        .status-container {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 10px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 18px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+            font-size: 0.9rem;
+        }
+        
+        .status-box {
+            width: 18px;
+            height: 18px;
+            border-radius: 4px;
+            border: 1px solid rgba(0,0,0,0.08);
+        }
+        
+        .white-box {
+            background-color: #ffffff;
+        }
+        
+        .red-box {
+            background-color: #ff6b6b;
+        }
+        
+        .green-box {
+            background-color: #1dd1a1;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn {
+            padding: 8px 15px;
+            font-size: 0.85rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            background: #3498db;
+            color: white;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            box-shadow: 0 3px 8px rgba(52, 152, 219, 0.25);
+            white-space: nowrap;
+        }
+        
+        .btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 12px rgba(52, 152, 219, 0.35);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn.export {
+            background: #1dd1a1;
+            box-shadow: 0 3px 8px rgba(29, 209, 161, 0.25);
+        }
+        
+        .btn.export:hover {
+            background: #10ac84;
+            box-shadow: 0 5px 12px rgba(29, 209, 161, 0.35);
+        }
+        
+        
+        /* 5列9行布局 - 初始垂直铺满 */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            grid-template-rows: repeat(9, 1fr);
+            gap: 8px;
+            flex: 1;
+            height: calc(100vh - 120px); /* 确保初始铺满 */
+        }
+        
+        .question-block {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
+            user-select: none;
+            border: 1px solid rgba(0,0,0,0.05);
+            background-color: #ffffff;
+            color: #2c3e50;
+            position: relative;
+        }
+        
+        .question-block:hover {
+            transform: scale(1.03);
+        }
+        
+        .question-block.active {
+            background-color: #ff6b6b;
+            color: white;
+            box-shadow: 0 5px 10px rgba(255, 107, 107, 0.25);
+        }
+        
+        .question-block.completed {
+            background-color: #1dd1a1;
+            color: white;
+        }
+        
+        .time-display {
+            font-size: 0.7rem;
+            margin-top: 4px;
+            text-align: center;
+            opacity: 0.9;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 90%;
+        }
+        
+        .counter-badge {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            background: rgba(0, 0, 0, 0.2);
+            color: white;
+            font-size: 0.7rem;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 1200px) {
+            .question-block {
+                font-size: 1rem;
+            }
+        }
+        
+        @media (max-width: 900px) {
+            .grid-container {
+                gap: 6px;
+            }
+            
+            .status-container {
+                gap: 10px;
+            }
+            
+            .btn {
+                padding: 7px 12px;
+                font-size: 0.8rem;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .grid-container {
+                gap: 4px;
+            }
+            
+            .question-block {
+                font-size: 0.9rem;
+            }
+            
+            .time-display {
+                font-size: 0.6rem;
+            }
+            
+            .btn {
+                padding: 6px 10px;
+                font-size: 0.75rem;
+            }
+            
+            .status-item {
+                font-size: 0.8rem;
+                padding: 4px 8px;
+                gap: 4px;
+            }
+            
+            .status-box {
+                width: 16px;
+                height: 16px;
+            }
+        }
+        
+        @media (max-width: 400px) {
+            .grid-container {
+                gap: 3px;
+            }
+            
+            .question-block {
+                font-size: 0.8rem;
+            }
+            
+            .time-display {
+                font-size: 0.55rem;
+            }
+            
+            .status-container {
+                gap: 6px;
+                font-size: 0.75rem;
+            }
+            
+            .controls {
+                gap: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="status-controls">
+            <div class="status-container">
+                <div class="status-item">
+                    <div class="status-box white-box"></div>
+                    <span>未开始</span>
+                </div>
+                <div class="status-item">
+                    <div class="status-box red-box"></div>
+                    <span>计时中</span>
+                </div>
+                <div class="status-item">
+                    <div class="status-box green-box"></div>
+                    <span>已完成</span>
+                </div>
+                <div class="controls">
+                    <button class="btn export" id="exportBtn">导出</button>
+                </div>
+            </div>
+            
+            <!-- <div class="controls">
+                <button class="btn export" id="exportBtn">导出</button>
+            </div> -->
+        </div>
+        
+        <div class="grid-container" id="questionsGrid"></div>
+    </div>
+    
+    <script>
+        // 题目数据存储
+        const questionsData = [];
+        const totalQuestions = 45;
+        let wakeLock = null;
+        
+        // 初始化题目数据
+        function initializeQuestions() {
+            for (let i = 1; i <= totalQuestions; i++) {
+                questionsData.push({
+                    id: i,
+                    state: 'inactive', // inactive, active, completed
+                    sessions: [], // 存储每次计时会话 {startTime, endTime, duration}
+                    currentSession: null,
+                    totalDuration: 0
+                });
+            }
+        }
+        
+        // 创建题目网格 (5列9行)
+        function createQuestionGrid() {
+            const gridContainer = document.getElementById('questionsGrid');
+            gridContainer.innerHTML = '';
+            
+            questionsData.forEach(question => {
+                const block = document.createElement('div');
+                block.className = 'question-block';
+                block.textContent = question.id;
+                block.dataset.id = question.id;
+                
+                // 时间显示容器
+                const timeDisplay = document.createElement('div');
+                timeDisplay.className = 'time-display';
+                block.appendChild(timeDisplay);
+                
+                // 计时次数标记
+                if (question.sessions.length > 0) {
+                    const counter = document.createElement('div');
+                    counter.className = 'counter-badge';
+                    counter.textContent = question.sessions.length;
+                    block.appendChild(counter);
+                }
+                
+                // 根据状态设置样式
+                if (question.state === 'active') {
+                    block.classList.add('active');
+                    timeDisplay.textContent = "计时中";
+                } else if (question.state === 'completed') {
+                    block.classList.add('completed');
+                    
+                    // 显示总用时
+                    if (question.totalDuration > 0) {
+                        const min = Math.floor(question.totalDuration / 60);
+                        const sec = question.totalDuration % 60;
+                        timeDisplay.textContent = `${min}分${sec}秒`;
+                    }
+                }
+                
+                // 添加点击事件
+                block.addEventListener('click', () => handleQuestionClick(question.id));
+                
+                gridContainer.appendChild(block);
+            });
+        }
+        
+        // 处理题目点击
+        function handleQuestionClick(questionId) {
+            const question = questionsData.find(q => q.id === questionId);
+            const block = document.querySelector(`.question-block[data-id="${questionId}"]`);
+            const timeDisplay = block.querySelector('.time-display');
+            
+            if (question.state === 'inactive' || question.state === 'completed') {
+                // 开始题目
+                question.state = 'active';
+                question.currentSession = {
+                    startTime: new Date(),
+                    endTime: null,
+                    duration: null
+                };
+                block.classList.remove('completed');
+                block.classList.add('active');
+                timeDisplay.textContent = "计时中";
+                
+                // 更新计时次数标记
+                updateCounterBadge(block, question.sessions.length);
+                
+            } else if (question.state === 'active') {
+                // 完成题目
+                question.state = 'completed';
+                const endTime = new Date();
+                question.currentSession.endTime = endTime;
+                question.currentSession.duration = Math.floor((endTime - question.currentSession.startTime) / 1000);
+                
+                // 保存本次会话
+                question.sessions.push(question.currentSession);
+                question.totalDuration += question.currentSession.duration;
+                question.currentSession = null;
+                
+                // 更新显示
+                block.classList.remove('active');
+                block.classList.add('completed');
+                
+                // 显示总用时
+                const min = Math.floor(question.totalDuration / 60);
+                const sec = question.totalDuration % 60;
+                timeDisplay.textContent = `${min}分${sec}秒`;
+                
+                // 更新计时次数标记
+                updateCounterBadge(block, question.sessions.length);
+            }
+        }
+        
+        // 更新计时次数标记
+        function updateCounterBadge(block, count) {
+            let counter = block.querySelector('.counter-badge');
+            if (!counter && count > 0) {
+                counter = document.createElement('div');
+                counter.className = 'counter-badge';
+                block.appendChild(counter);
+            }
+            
+            if (counter) {
+                counter.textContent = count;
+            }
+        }
+        
+        // 导出数据（使用英文列名）
+        function exportData() {
+            // 详细记录数据
+            const detailedData = [];
+            
+            questionsData.forEach(question => {
+                if (question.sessions.length > 0) {
+                    question.sessions.forEach((session, index) => {
+                        detailedData.push({
+                            'Question': question.id,
+                            'Session': index + 1,
+                            'StartTime': session.startTime.toLocaleString(),
+                            'EndTime': session.endTime.toLocaleString(),
+                            'Duration(sec)': session.duration,
+                            'Duration(min:sec)': `${Math.floor(session.duration/60)}:${session.duration%60}`
+                        });
+                    });
+                }
+            });
+            
+            // 总用时数据
+            const summaryData = questionsData
+                .filter(q => q.totalDuration > 0)
+                .map(question => {
+                    const min = Math.floor(question.totalDuration / 60);
+                    const sec = question.totalDuration % 60;
+                    
+                    return {
+                        'Question': question.id,
+                        'TotalDuration(sec)': question.totalDuration,
+                        'TotalDuration(min:sec)': `${min}:${sec}`,
+                        'Sessions': question.sessions.length
+                    };
+                });
+            
+            if (detailedData.length === 0 && summaryData.length === 0) {
+                alert('No data to export');
+                return;
+            }
+            
+            // 转换为CSV
+            let csvContent = "data:text/csv;charset=utf-8,";
+            
+            // 添加详细记录
+            if (detailedData.length > 0) {
+                const header1 = "Detailed Timing Records\n";
+                const header2 = "Question,Session,StartTime,EndTime,Duration(sec),Duration(min:sec)\n";
+                const detailedContent = detailedData.map(q => 
+                    `${q['Question']},${q['Session']},${q['StartTime']},${q['EndTime']},${q['Duration(sec)']},${q['Duration(min:sec)']}`
+                ).join("\n");
+                
+                csvContent += header1 + header2 + detailedContent;
+            }
+            
+            // 添加总用时记录
+            if (summaryData.length > 0) {
+                const summaryHeader1 = "\n\nQuestion Total Duration Summary\n";
+                const summaryHeader2 = "Question,TotalDuration(sec),TotalDuration(min:sec),Sessions\n";
+                const summaryContent = summaryData.map(q => 
+                    `${q['Question']},${q['TotalDuration(sec)']},${q['TotalDuration(min:sec)']},${q['Sessions']}`
+                ).join("\n");
+                
+                csvContent += summaryHeader1 + summaryHeader2 + summaryContent;
+            }
+            
+            // 创建下载链接
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "P2-Time-Record.csv");
+            document.body.appendChild(link);
+            
+            link.click();
+            document.body.removeChild(link);
+        }
+        
+        // 重置所有题目
+        function resetAll() {
+            if (confirm('Reset all questions? All records will be cleared.')) {
+                initializeQuestions();
+                createQuestionGrid();
+            }
+        }
+        
+        // 屏幕常亮功能
+        async function requestWakeLock() {
+            if ('wakeLock' in navigator) {
+                try {
+                    wakeLock = await navigator.wakeLock.request('screen');
+                } catch (err) {
+                    console.error('Failed to enable screen wake lock:', err);
+                }
+            }
+        }
+        
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeQuestions();
+            createQuestionGrid();
+            
+            // 添加事件监听器
+            document.getElementById('exportBtn').addEventListener('click', exportData);
+            
+            // 默认启用屏幕常亮
+            requestWakeLock();
+            
+            // 当页面可见性变化时重新获取唤醒锁
+            document.addEventListener('visibilitychange', async () => {
+                if (document.visibilityState === 'visible') {
+                    await requestWakeLock();
+                }
+            });
+            
+            // 确保网格初始铺满
+            window.addEventListener('resize', () => {
+                const gridContainer = document.getElementById('questionsGrid');
+                gridContainer.style.height = `calc(100vh - ${document.querySelector('.status-controls').offsetHeight + 30}px)`;
+            });
+        });
+    </script>
+</body>
+</html>
