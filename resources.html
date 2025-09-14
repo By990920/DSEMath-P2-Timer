@@ -6,9 +6,15 @@
     <title>Factor Math</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* 主题色 */
+        :root {
+            --primary-color: #009A56;     /* 主色调 - 用于标题、边框等 */
+            --primary-light: #EFF7F3;     /* 浅主色调 - 用于卡片背景等 */
+        }
+
         ::selection {
-            background: #E9E7F4;
-            color: #614099;
+            background: var(--primary-light);
+            color: var(--primary-color);
             }
         @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&display=swap');
         * {
@@ -64,8 +70,8 @@
         }
         
         .nav-links a:hover {
-            background-color: #E9E7F4;
-            color: #614099;
+            background-color: var(--primary-light);
+            color: var(--primary-color);
         }
         
         /* 主要内容区域 */
@@ -86,7 +92,7 @@
             color: #3a506b;
             margin-bottom: 1.5rem;
             padding-bottom: 0.5rem;
-            border-bottom: 2px solid #614099;
+            border-bottom: 2px solid var(--primary-color);
             display: inline-block;
             font-size: 1.2rem;
         }
@@ -100,10 +106,10 @@
         }
         
         .card {
-            background: #E9E7F4;
+            background: var(--primary-light);
             padding: 1.5rem;
             border-radius: 8px;
-            border-left: 4px solid #614099;
+            border-left: 4px solid var(--primary-color);
             transition: transform 0.3s;
             cursor: pointer;
             flex: 1 1 300px;
@@ -196,8 +202,8 @@
         }
         
         .footer-column a:hover {
-            background-color: #E9E7F4;
-            color: #614099;
+            background-color: var(--primary-light);
+            color: var(--primary-color);
         }
         
         .social-links {
@@ -252,7 +258,7 @@
                 <li><a href="index.html">首页</a></li>
                 <li><a href="teaching.html">DSE课程</a></li>
                 <li><a href="resources.html">学习资源</a></li>
-                <li><a href="about.html">关于我</a></li>
+                <li><a href="about.html">关于</a></li>
                 <li><a href="contact.html">联系我</a></li>
             </ul>
         </div>
@@ -269,76 +275,73 @@
                 <div class="grid">
                     <a href="files/M1/M1_formula_2509.pdf" download="M1_formula_2509.pdf" class="card-link">
                         <div class="card">
-                            <h3><i class="fas fa-clock"></i> M1 Formula</h3>
-                            <p>基础的公式外，也有一些额外的有用的公式</p>
+                            <h3><i class="fas fa-file-alt"></i> M1 基础公式</h3>
+                            <p>基础的公式外，也有一些额外的有用的公式，点击卡片下载PDF >>></p>
                         </div>
                     </a>
-                    <div class="card">
-                        <h3><i class="fas fa-chart-line"></i> M1/M2 选修</h3>
-                        <p>延伸部分单元一（微积分与统计）和单元二（代数与微积分）专项辅导</p>
-                    </div>
-                    <div class="card">
-                        <h3><i class="fas fa-tachometer-alt"></i> 插班备考</h3>
-                        <p>知识点分析、应试技巧、时间管理策略和心理准备</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="content-section">
-                <h2>教学理念</h2>
-                <p>学好数学很多时候靠的不是思维，而是态度。</p>
-                
-                <div class="grid">
-                    <div class="card">
-                        <h3><i class="fas fa-lightbulb"></i> 概念理解</h3>
-                        <p>强调数学概念的本质和实际应用，而非机械记忆公式</p>
-                    </div>
-                    <div class="card">
-                        <h3><i class="fas fa-puzzle-piece"></i> 问题解决</h3>
-                        <p>培养分析问题和寻找解决方案的能力</p>
-                    </div>
-                    <div class="card">
-                        <h3><i class="fas fa-chart-line"></i> 循序渐进</h3>
-                        <p>根据学生水平定制学习计划，逐步建立信心和能力</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="content-section">
-                <h2>学习资源</h2>
-                <p>更新速度偏慢，需要时间沉淀。</p>
-                <div class="grid">
-                    <div class="card">
-                        <h3><i class="fas fa-file-alt"></i> 2023年DSE数学分析</h3>
-                        <p>最新DSE考试题目分析和解答技巧</p>
-                    </div>
-                    <div class="card">
-                        <h3><i class="fas fa-file"></i> 常见错误解析</h3>
-                        <p>学生常犯错误类型及避免方法</p>
-                    </div>
-                    <div class="card">
-                        <h3><i class="fas fa-book"></i> 公式手册</h3>
-                        <p>DSE数学必备公式整理与记忆技巧</p>
-                    </div>
-                </div>
-                
-                <!-- <p style="margin-top: 1.5rem; text-align: center;">
-                    <a href="resources.html" style="color: #614099; text-decoration: none; font-weight: bold;">
-                        查看更多资源 <i class="fas fa-arrow-right"></i>
+                    <a href="https://www.xiaohongshu.com/collection/item/68ad66910158000000000001?xhsshare=CopyLink&appuid=64d030ef000000000e024377&apptime=1757869199&share_id=764cc0a11aed4559b8edf6bf3123f7c7&share_channel=copy_link" class="card-link">
+                        <div class="card">
+                            <h3><i class="fas fa-video"></i> M1 概统讲解</h3>
+                            <p>依照 CTEP 版本教材讲解，主要是概念以及例题，点击跳转小红书查看 >>></p>
+                        </div>
                     </a>
-                </p> -->
+                </div>
+            </div>
+            
+            <div class="content-section">
+                <h2>M2</h2>
+                <p>M2 投入的精力较少，正在研究中。</p>
+                <div class="grid">
+                    <!-- <a href="files/M1/M2_formula.pdf" download="M1_formula_2509.pdf" class="card-link"> -->
+                        <div class="card">
+                            <h3><i class="fas fa-file-alt"></i> M2 基础公式</h3>
+                            <p>此卡片仅作规划使用，尚未有文件可以下载 >>></p>
+                        </div>
+                    <!-- </a> -->
+                    <!-- <a href="files/M1/M2_formula.pdf" download="M1_formula_2509.pdf" class="card-link"> -->
+                        <div class="card">
+                            <h3><i class="fas fa-file-alt"></i> M2 笔记</h3>
+                            <p>此卡片仅作规划使用，尚未有文件可以下载 >>></p>
+                        </div>
+                    <!-- </a> -->
+                </div>
+            </div>
+            
+            <div class="content-section">
+                <h2>Core</h2>
+                <p>规划中。</p>
+                <div class="grid">
+                    <!-- <a href="files/M1/M2_formula.pdf" download="M1_formula_2509.pdf" class="card-link"> -->
+                        <div class="card">
+                            <h3><i class="fas fa-file-alt"></i> Core 基础公式</h3>
+                            <p>此卡片仅作规划使用，尚未有文件可以下载 >>></p>
+                        </div>
+                    <!-- </a> -->
+                    <!-- <a href="files/M1/M2_formula.pdf" download="M1_formula_2509.pdf" class="card-link"> -->
+                        <div class="card">
+                            <h3><i class="fas fa-file-alt"></i> Core 笔记</h3>
+                            <p>此卡片仅作规划使用，尚未有文件可以下载 >>></p>
+                        </div>
+                    <!-- </a> -->
+                </div>
             </div>
 
             <div class="content-section">
-                <h2>实用工具</h2>
-                <p>都是学习过程中有用的，才会放在这里。</p>
+                <h2>Others</h2>
+                <p>规划中。</p>
                 <div class="grid">
-                <a href="time_tracker.html" class="card-link">
-                    <div class="card">
-                        <h3><i class="fas fa-clock"></i> 时间统计</h3>
-                        <p>Paper 2 时间记录</p>
-                    </div>
-                </a>
+                    <!-- <a href="files/M1/M2_formula.pdf" download="M1_formula_2509.pdf" class="card-link"> -->
+                        <div class="card">
+                            <h3><i class="fas fa-file-alt"></i> 其他公式</h3>
+                            <p>此卡片仅作规划使用，尚未有文件可以下载 >>></p>
+                        </div>
+                    <!-- </a> -->
+                    <!-- <a href="files/M1/M2_formula.pdf" download="M1_formula_2509.pdf" class="card-link"> -->
+                        <div class="card">
+                            <h3><i class="fas fa-file-alt"></i> 其他笔记</h3>
+                            <p>此卡片仅作规划使用，尚未有文件可以下载 >>></p>
+                        </div>
+                    <!-- </a> -->
                 </div>
             </div>
         </main>
@@ -352,14 +355,14 @@
                     <a href="index.html">首页</a>
                     <a href="teaching.html">DSE课程</a>
                     <a href="resources.html">学习资源</a>
-                    <a href="about.html">关于我</a>
+                    <a href="about.html">关于</a>
                     <a href="contact.html">联系我</a>
                 </div>
                 
                 <div class="footer-column">
-                    <h3>联系我们</h3>
+                    <h3>联系我</h3>
                     <p>Jack@galaxydse.cn</p>
-                    <p>19386730920</p>
+                    <p>z13632026382</p>
                     <p>深圳</p>
                 </div>
             </div>
